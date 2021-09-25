@@ -1,7 +1,6 @@
 import React, {useEffect,useState} from 'react';
 import '../css/Weatherapp.css';
 import location from '../location.gif.gif'
-
 export default function Weatherapp() {
 
     const [city, setCity] = useState(null);   //hook
@@ -12,13 +11,13 @@ export default function Weatherapp() {
             const url = `http://api.openweathermap.org/data/2.5/weather?q=${search}&appid=43b7f97089111f4a01c6e892be4277e1`
             const response = await fetch(url); //fetch api returns promise
             const resJson = await response.json();
-            // console.log(resJson);
-            setCity(resJson);
+            console.log(resJson);
+            setCity(resJson.main);
         }
 
         fetchApi(); //always call the function in the bottom in fat arrow function
-    })
-
+    }, [search] )
+ 
     return (
         <>
         <div className="box">
@@ -26,13 +25,16 @@ export default function Weatherapp() {
                 <input type="search" className="inputField" onChange={ (event) =>{setSearch(event.target.value) } } />
             </div>
 
-        <div className="info">
+            {!city ? (<p> No Data Found</p>
+            ) : (
+                <div>
+                <div className="info">
             <h2 className="location">
                 {search}
                 <img src={location} alt="location"/>
             </h2>
             <h1 className="temp">
-                5.25°Cel
+                {city.temp}
             </h1>
             <h3 className="tempmin_max">Min : 5.25°Cel | Max : 5.25°Cel</h3>
         </div>
@@ -42,6 +44,10 @@ export default function Weatherapp() {
         <div className="wave-two"></div> 
         <div className="wave-three"></div> 
         </div>
+        </div>
+            )
+            }
+
         </div>
         </>
     )
